@@ -1,4 +1,8 @@
 package com.artemnizhnyk.tasklist.domain.exception;
 
-public class ResourceNotFound {
+public class ResourceNotFoundException extends RuntimeException {
+
+    public ResourceNotFoundException(final String message) {
+        super(message);
+    }
 }

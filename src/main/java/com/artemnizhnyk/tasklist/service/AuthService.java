@@ -1,2 +1,10 @@
-package com.artemnizhnyk.tasklist.service;public interface AuthService {
+package com.artemnizhnyk.tasklist.service;
+
+import com.artemnizhnyk.tasklist.web.dto.auth.JwtRequest;
+import com.artemnizhnyk.tasklist.web.dto.auth.JwtResponse;
+
+public interface AuthService {
+
+    JwtResponse login(JwtRequest loginRequest);
+    JwtResponse refresh(String refreshToken);
 }

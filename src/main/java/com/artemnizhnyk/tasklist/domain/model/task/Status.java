@@ -1,4 +1,4 @@
-package com.artemnizhnyk.tasklist.domain.task;
+package com.artemnizhnyk.tasklist.domain.model.task;
 
 public enum Status {
 

@@ -1,5 +1,6 @@
-package com.artemnizhnyk.tasklist.service;
+package com.artemnizhnyk.tasklist.service.impl;
 
+import com.artemnizhnyk.tasklist.service.TaskService;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
 import org.springframework.stereotype.Service;
 

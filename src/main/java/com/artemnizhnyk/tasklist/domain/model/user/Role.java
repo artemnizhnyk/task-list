@@ -1,4 +1,4 @@
-package com.artemnizhnyk.tasklist.domain.user;
+package com.artemnizhnyk.tasklist.domain.model.user;
 
 public enum Role {
 

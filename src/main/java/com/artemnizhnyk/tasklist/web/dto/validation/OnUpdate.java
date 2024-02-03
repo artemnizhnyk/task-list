@@ -1,2 +1,4 @@
-package com.artemnizhnyk.tasklist.web.dto.validation;public interface OnUpdate {
+package com.artemnizhnyk.tasklist.web.dto.validation;
+
+public interface OnUpdate {
 }

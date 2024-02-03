@@ -1,2 +1,16 @@
-package com.artemnizhnyk.tasklist.web.dto;public class TaskDto {
+package com.artemnizhnyk.tasklist.web.dto;
+
+import com.artemnizhnyk.tasklist.domain.model.task.Status;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class TaskDto {
+
+    private Long id;
+    private String title;
+    private String description;
+    private Status status;
+    private LocalDateTime expirationDate;
 }
