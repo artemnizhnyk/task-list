@@ -90,7 +90,7 @@ public class JwtTokenProvider {
         return jwtResponse;
     }
 
-    private boolean isValidateToken(final String token) {
+    public boolean isValidateToken(final String token) {
         Jws<Claims> claims = Jwts
                 .parser()
                 .verifyWith(key)
