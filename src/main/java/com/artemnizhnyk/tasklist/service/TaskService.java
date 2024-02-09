@@ -8,8 +8,8 @@ import java.util.List;
 public interface TaskService {
 
     TaskDto getByIdOrThrowException(final Long id);
-
-    List<TaskDto> getAllByUserId(final Long userId);
+    List<TaskDto> getAllByUserId(final Long id);
+    TaskDto create(TaskDto taskDto, Long userId);
 
     TaskDto update(final TaskDto taskDto);
 

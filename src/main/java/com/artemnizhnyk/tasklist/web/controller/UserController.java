@@ -1,5 +1,6 @@
 package com.artemnizhnyk.tasklist.web.controller;
 
+import com.artemnizhnyk.tasklist.service.TaskService;
 import com.artemnizhnyk.tasklist.service.UserService;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final TaskService taskService;
 
     @GetMapping("/{id}")
     public UserDto getById(@PathVariable final Long id) {
@@ -27,18 +29,18 @@ public class UserController {
 
     @GetMapping("/{id}/tasks")
     public List<TaskDto> getTasksByUserId(@PathVariable final Long id) {
-        return userService.getTasksByUserId(id);
+        return taskService.getAllByUserId(id);
     }
 
     @PostMapping("/{id}/tasks")
     public TaskDto createTask(@PathVariable final Long id,
                               @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
-        return userService.createTask(taskDto, id);
+        return taskService.create(taskDto, id);
     }
 
     @PutMapping()
-    public UserDto update(@Validated(OnUpdate.class) @RequestBody UserDto taskDto) {
-        return userService.update(taskDto);
+    public UserDto updateTask(@Validated(OnUpdate.class) @RequestBody UserDto taskDto) {
+        return userService.updateTask(taskDto);
     }
 
     @DeleteMapping("/{id}")

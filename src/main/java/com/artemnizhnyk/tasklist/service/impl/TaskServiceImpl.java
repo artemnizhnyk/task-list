@@ -1,15 +1,20 @@
 package com.artemnizhnyk.tasklist.service.impl;
 
 import com.artemnizhnyk.tasklist.domain.exception.ResourceNotFoundException;
+import com.artemnizhnyk.tasklist.domain.model.task.Status;
 import com.artemnizhnyk.tasklist.domain.model.task.Task;
+import com.artemnizhnyk.tasklist.domain.model.user.User;
 import com.artemnizhnyk.tasklist.repository.TaskRepository;
 import com.artemnizhnyk.tasklist.service.TaskService;
+import com.artemnizhnyk.tasklist.service.UserService;
 import com.artemnizhnyk.tasklist.service.mapper.TaskMapper;
+import com.artemnizhnyk.tasklist.service.mapper.UserMapper;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +24,8 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Override
     public TaskDto getByIdOrThrowException(final Long id) {
@@ -28,8 +35,24 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> getAllByUserId(final Long userId) {
-        return null;
+    public List<TaskDto> getAllByUserId(final Long id) {
+        List<Task> usersByUserId = taskRepository.findAllByUserId(id);
+        if (usersByUserId == null || usersByUserId.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return taskMapper.toDto(usersByUserId);
+        }
+    }
+
+    @Override
+    public TaskDto create(TaskDto taskDto, final Long userId) {
+        if (taskDto.getStatus() != null) {
+            taskDto.setStatus(Status.TODO);
+        }
+        Task task = taskMapper.toEntity(taskDto);
+        User user = userMapper.toEntity(userService.getByIdOrThrowException(userId));
+        task.setUser(user);
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Override

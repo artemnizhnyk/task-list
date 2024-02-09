@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(final String username);
+
+    boolean existsByIdAndTasksContains(final Long id, final List<Task> tasks);
 }

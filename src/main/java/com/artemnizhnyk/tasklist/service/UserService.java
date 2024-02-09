@@ -1,10 +1,7 @@
 package com.artemnizhnyk.tasklist.service;
 
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
-import com.artemnizhnyk.tasklist.web.dto.TaskDto;
 import com.artemnizhnyk.tasklist.web.dto.UserDto;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -12,13 +9,12 @@ public interface UserService {
 
     UserDto getByUsername(final String username);
 
-    UserDto update(final UserDto userDto);
+    UserDto updateTask(final UserDto userDto);
 
-    TaskDto createTask(final TaskDto taskDto, final Long userId);
+    UserDto createOrThrowException(final UserDto userDto);
 
     boolean isTaskOwner(final Long userId, final Long taskId);
 
     AnswerDto deleteById(final Long id);
 
-    List<TaskDto> getTasksByUserId(final Long id);
 }
