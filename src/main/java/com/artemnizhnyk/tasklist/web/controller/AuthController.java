@@ -23,7 +23,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @PostMapping("/login")
     public JwtResponse login(@Validated @RequestBody final JwtRequest loginRequest) {
@@ -32,7 +31,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public UserDto register(@Validated(OnCreate.class) @RequestBody final UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        User createdUser = userMapper.toEntity(userService.createOrThrowException(userDto));
+        return userService.createOrThrowException(userDto);
+    }
+
+    @PostMapping("/refresh")
+    public JwtResponse refresh(@RequestBody final String refreshToken) {
+        return authService.refresh()
     }
 }

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getByUsername(final String username) {
+    public UserDto getByUsernameOrThrowException(final String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("User with name: %s, wasn't found", username)));
         return userMapper.toDto(user);

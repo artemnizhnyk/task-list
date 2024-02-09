@@ -33,9 +33,9 @@ public class UserController {
     }
 
     @PostMapping("/{id}/tasks")
-    public TaskDto createTask(@PathVariable final Long id,
+    public TaskDto createTask(@PathVariable("id") final Long userId,
                               @Validated(OnCreate.class) @RequestBody TaskDto taskDto) {
-        return taskService.create(taskDto, id);
+        return taskService.create(taskDto, userId);
     }
 
     @PutMapping()

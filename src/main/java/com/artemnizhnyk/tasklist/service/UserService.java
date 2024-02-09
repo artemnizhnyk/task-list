@@ -7,7 +7,7 @@ public interface UserService {
 
     UserDto getByIdOrThrowException(final Long id);
 
-    UserDto getByUsername(final String username);
+    UserDto getByUsernameOrThrowException(final String username);
 
     UserDto updateTask(final UserDto userDto);
 
