@@ -22,6 +22,7 @@ public class User {
     private String name;
     private String username;
     private String password;
+    @Transient
     private String passwordConfirmation;
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)

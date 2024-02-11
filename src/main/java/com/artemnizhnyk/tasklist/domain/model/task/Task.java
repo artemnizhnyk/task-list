@@ -18,6 +18,7 @@ public class Task {
     private Long id;
     private String title;
     private String description;
+    @Column(columnDefinition = "varchar")
     private Status status;
     private LocalDateTime expirationDate;
     @Cascade(org.hibernate.annotations.CascadeType.PERSIST)

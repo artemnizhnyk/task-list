@@ -36,6 +36,6 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public JwtResponse refresh(@RequestBody final String refreshToken) {
-        return authService.refresh()
+        return authService.refresh(refreshToken);
     }
 }

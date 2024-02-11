@@ -24,10 +24,10 @@ public class UserDto {
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Null(message = "Password must be not null", groups = {OnCreate.class, OnUpdate.class})
+    @NotNull(message = "Password must be not null", groups = {OnCreate.class, OnUpdate.class})
     private String password;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Null(message = "Password must be not null", groups = {OnCreate.class})
+    @NotNull(message = "Password must be not null", groups = {OnCreate.class})
     private String passwordConfirmation;
 }

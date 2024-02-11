@@ -13,6 +13,7 @@ import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public TaskDto getByIdOrThrowException(final Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
@@ -34,6 +36,7 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(task);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<TaskDto> getAllByUserId(final Long id) {
         List<Task> usersByUserId = taskRepository.findAllByUserId(id);
@@ -43,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
             return taskMapper.toDto(usersByUserId);
         }
     }
-
+    @Transactional
     @Override
     public TaskDto create(TaskDto taskDto, final Long userId) {
         if (taskDto.getStatus() != null) {
@@ -55,12 +58,14 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(taskRepository.save(task));
     }
 
+    @Transactional
     @Override
     public TaskDto update(final TaskDto taskDto) {
         Task updatedTask = taskRepository.save(taskMapper.toEntity(taskDto));
         return taskMapper.toDto(updatedTask);
     }
 
+    @Transactional
     @Override
     public AnswerDto deleteById(final Long id) {
         getByIdOrThrowException(id);

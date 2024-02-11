@@ -11,6 +11,7 @@ import com.artemnizhnyk.tasklist.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     @Override
     public UserDto getByIdOrThrowException(final Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDto getByUsernameOrThrowException(final String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -38,12 +41,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @Transactional
     @Override
     public UserDto updateTask(final UserDto userDto) {
         User updatedUser = userRepository.save(userMapper.toEntity(userDto));
         return userMapper.toDto(updatedUser);
     }
 
+    @Transactional
     @Override
     public UserDto createOrThrowException(final UserDto userDto) {
         userRepository.findByUsername(userDto.getUsername())
@@ -68,6 +73,7 @@ public class UserServiceImpl implements UserService {
         return user.getTasks().stream().anyMatch(it -> it.getId().equals(taskId));
     }
 
+    @Transactional
     @Override
     public AnswerDto deleteById(final Long id) {
         getByIdOrThrowException(id);
