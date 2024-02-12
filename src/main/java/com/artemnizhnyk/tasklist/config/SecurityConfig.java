@@ -2,7 +2,6 @@ package com.artemnizhnyk.tasklist.config;
 
 import com.artemnizhnyk.tasklist.web.security.JwtTokenFilter;
 import com.artemnizhnyk.tasklist.web.security.JwtTokenProvider;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.ApplicationContext;
@@ -64,9 +63,11 @@ public class SecurityConfig {
                                         })
                 )
                 .authorizeHttpRequests(config ->
-                        config.requestMatchers("/api/v1/auth/**")
-                                .permitAll()
-                        .anyRequest().authenticated()
+                        config
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider),
