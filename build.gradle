@@ -32,6 +32,7 @@ dependencies {
 //Other
 dependencies {
     runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.liquibase:liquibase-core:4.26.0'
 
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'

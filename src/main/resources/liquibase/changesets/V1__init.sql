@@ -1,11 +1,10 @@
-CREATE SCHEMA IF NOT EXISTS task_list_schema;
-
 CREATE TABLE IF NOT EXISTS users
 (
     id       bigserial primary key,
     name     varchar(255) not null,
     username varchar(255) not null unique,
-    password varchar(255) not null
+    password varchar(255) not null,
+    role     varchar(255) not null check (role in ('ROLE_USER', 'ROLE_ADMIN'))
 );
 
 CREATE TABLE IF NOT EXISTS tasks
