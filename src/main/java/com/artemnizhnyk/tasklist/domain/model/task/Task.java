@@ -21,7 +21,6 @@ public class Task {
     @Column(columnDefinition = "varchar")
     private Status status;
     private LocalDateTime expirationDate;
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     @ManyToOne
     private User user;
 }

@@ -16,14 +16,14 @@ public class JwtEntityFactory {
                 user.getName(),
                 user.getUsername(),
                 user.getPassword(),
-                mapToGrantedAuthorities(new ArrayList<>(user.getRoles()))
+                mapToGrantedAuthorities(user.getRole())
         );
     }
 
-    private static List<? extends GrantedAuthority> mapToGrantedAuthorities(final List<Role> roles) {
-        return roles.stream()
-                .map(Enum::name)
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+    private static List<? extends GrantedAuthority> mapToGrantedAuthorities(final Role role) {
+        List<SimpleGrantedAuthority> roles = new ArrayList<>();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
+        roles.add(authority);
+        return roles;
     }
 }

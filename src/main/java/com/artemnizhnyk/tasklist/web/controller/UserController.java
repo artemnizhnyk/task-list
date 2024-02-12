@@ -39,8 +39,8 @@ public class UserController {
     }
 
     @PutMapping()
-    public UserDto updateTask(@Validated(OnUpdate.class) @RequestBody UserDto taskDto) {
-        return userService.updateTask(taskDto);
+    public UserDto updateTask(@Validated(OnUpdate.class) @RequestBody UserDto userDto) {
+        return userService.updateUser(userDto);
     }
 
     @DeleteMapping("/{id}")

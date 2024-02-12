@@ -9,7 +9,7 @@ public interface UserService {
 
     UserDto getByUsernameOrThrowException(final String username);
 
-    UserDto updateTask(final UserDto userDto);
+    UserDto updateUser(final UserDto userDto);
 
     UserDto createOrThrowException(final UserDto userDto);
 

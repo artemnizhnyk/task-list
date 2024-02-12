@@ -4,12 +4,13 @@ import com.artemnizhnyk.tasklist.web.security.JwtTokenFilter;
 import com.artemnizhnyk.tasklist.web.security.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,8 +34,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @SneakyThrows
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(final AuthenticationConfiguration configuration) {
         return configuration.getAuthenticationManager();
     }
 
@@ -43,26 +45,32 @@ public class SecurityConfig {
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                .exceptionHandling(config -> config
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("Unauthorized");
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            response.getWriter().write("Unauthorized");
-                        })
+                .sessionManagement(sessionManagement ->
+                        sessionManagement
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                .authorizeHttpRequests(config -> config.requestMatchers("/api/v1/auth/**").permitAll()
+                .exceptionHandling(config ->
+                        config.authenticationEntryPoint(
+                                        (request, response, authException) -> {
+                                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                            response.getWriter().write("Unauthorized");
+                                        })
+                                .accessDeniedHandler(
+                                        (request, response, accessDeniedException) -> {
+                                            response.setStatus(HttpStatus.FORBIDDEN.value());
+                                            response.getWriter().write("Unauthorized");
+                                        })
+                )
+                .authorizeHttpRequests(config ->
+                        config.requestMatchers("/api/v1/auth/**")
+                                .permitAll()
                         .anyRequest().authenticated()
                 )
                 .anonymous(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

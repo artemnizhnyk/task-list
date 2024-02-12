@@ -3,10 +3,10 @@ package com.artemnizhnyk.tasklist.domain.model.user;
 import com.artemnizhnyk.tasklist.domain.model.task.Task;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -24,12 +24,9 @@ public class User {
     private String password;
     @Transient
     private String passwordConfirmation;
-    @Column(name = "role")
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "users_roles")
     @Enumerated(value = EnumType.STRING)
-    private Set<Role> roles;
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    private Role role;
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<Task> tasks = new ArrayList<>();
 }

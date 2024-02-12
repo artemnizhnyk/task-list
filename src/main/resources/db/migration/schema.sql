@@ -19,12 +19,3 @@ CREATE TABLE IF NOT EXISTS tasks
     constraint fk_users foreign key (user_id) references users (id)
         on delete cascade on update no action
 );
-
-CREATE TABLE IF NOT EXISTS users_roles
-(
-    user_id bigint       not null,
-    role    varchar(255) not null check (role in ('ROLE_USER', 'ROLE_ADMIN')),
-    primary key (user_id, role),
-    constraint fk_users foreign key (user_id) references users (id)
-        on delete cascade on update no action
-);

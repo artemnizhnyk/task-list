@@ -1,17 +1,19 @@
 package com.artemnizhnyk.tasklist.web.security;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class JwtEntity implements UserDetails {
 
-    private Long id;
+    private final Long id;
     private final String name;
     private final String username;
     private final String password;

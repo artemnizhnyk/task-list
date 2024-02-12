@@ -43,7 +43,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDto updateTask(final UserDto userDto) {
+    public UserDto updateUser(final UserDto userDto) {
+        Role userRole = getByIdOrThrowException(userDto.getId()).getRole();
+        userDto.setRole(userRole);
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User updatedUser = userRepository.save(userMapper.toEntity(userDto));
         return userMapper.toDto(updatedUser);
     }
@@ -60,8 +63,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Set<Role> roles = Set.of(Role.ROLE_USER);
-        user.setRoles(roles);
+        user.setRole(Role.ROLE_USER);
         return userMapper.toDto(userRepository.save(user));
     }
 

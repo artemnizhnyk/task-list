@@ -32,7 +32,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskDto getByIdOrThrowException(final Long id) {
         Optional<Task> optionalTask = taskRepository.findById(id);
-        Task task = optionalTask.orElseThrow(() -> new ResourceNotFoundException(String.format("Task with id: %d, wasn't found", id)));
+        Task task = optionalTask.orElseThrow(() ->
+                new ResourceNotFoundException(String.format("Task with id: %d, wasn't found", id)));
         return taskMapper.toDto(task);
     }
 
@@ -46,22 +47,29 @@ public class TaskServiceImpl implements TaskService {
             return taskMapper.toDto(usersByUserId);
         }
     }
+
     @Transactional
     @Override
     public TaskDto create(TaskDto taskDto, final Long userId) {
-        if (taskDto.getStatus() != null) {
+        if (taskDto.getStatus() == null) {
             taskDto.setStatus(Status.TODO);
         }
         Task task = taskMapper.toEntity(taskDto);
         User user = userMapper.toEntity(userService.getByIdOrThrowException(userId));
         task.setUser(user);
-        return taskMapper.toDto(taskRepository.save(task));
+        Task savedTask = taskRepository.save(task);
+        return taskMapper.toDto(savedTask);
     }
 
     @Transactional
     @Override
     public TaskDto update(final TaskDto taskDto) {
-        Task updatedTask = taskRepository.save(taskMapper.toEntity(taskDto));
+        User taskOwner = taskRepository.findById(taskDto.getId()).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("Task with id: %d, wasn't found", taskDto.getId()))
+        ).getUser();
+        Task taskToSave = taskMapper.toEntity(taskDto);
+        taskToSave.setUser(taskOwner);
+        Task updatedTask = taskRepository.save(taskToSave);
         return taskMapper.toDto(updatedTask);
     }
 

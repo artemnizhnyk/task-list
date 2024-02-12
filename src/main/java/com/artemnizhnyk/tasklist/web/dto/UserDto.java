@@ -1,5 +1,6 @@
 package com.artemnizhnyk.tasklist.web.dto;
 
+import com.artemnizhnyk.tasklist.domain.model.user.Role;
 import com.artemnizhnyk.tasklist.web.dto.validation.OnCreate;
 import com.artemnizhnyk.tasklist.web.dto.validation.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,4 +31,6 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message = "Password must be not null", groups = {OnCreate.class})
     private String passwordConfirmation;
+    @Null(message = "Role must be null")
+    private Role role;
 }
