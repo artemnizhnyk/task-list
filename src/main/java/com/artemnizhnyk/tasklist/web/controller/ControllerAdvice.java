@@ -6,6 +6,7 @@ import com.artemnizhnyk.tasklist.domain.exception.ResourceMappingException;
 import com.artemnizhnyk.tasklist.domain.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,12 @@ class ControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AuthenticationException.class)
+    public ExceptionBody handleAuthentication(final AuthenticationException e) {
+        return new ExceptionBody("Authentication failed");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ExceptionBody handleMethodArgumentNotValid(final MethodArgumentNotValidException e) {
         ExceptionBody exceptionBody = new ExceptionBody("Validation failed");
@@ -69,6 +76,7 @@ class ControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     ExceptionBody handleAnyException(final Exception e) {
+        e.printStackTrace();
         return new ExceptionBody("Internal error");
     }
 }
