@@ -18,7 +18,7 @@ public class Task {
     private Long id;
     private String title;
     private String description;
-    @Column(columnDefinition = "varchar")
+    @Enumerated(EnumType.STRING)
     private Status status;
     private LocalDateTime expirationDate;
     @ManyToOne
