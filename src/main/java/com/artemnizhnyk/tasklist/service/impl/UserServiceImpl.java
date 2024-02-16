@@ -9,6 +9,10 @@ import com.artemnizhnyk.tasklist.service.mapper.UserMapper;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
+    @Cacheable(value = "UserService::getByIdOrThrowException", key = "#id")
     @Transactional(readOnly = true)
     @Override
     public UserDto getByIdOrThrowException(final Long id) {
@@ -33,6 +38,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @Cacheable(value = "UserService::getByUsernameOrThrowException", key = "#username")
     @Transactional(readOnly = true)
     @Override
     public UserDto getByUsernameOrThrowException(final String username) {
@@ -41,6 +47,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    @Caching(put = {
+            @CachePut(value = "UserService::getByIdOrThrowException", key = "#userDto.id"),
+            @CachePut(value = "UserService::getByUsernameOrThrowException", key = "#userDto.username")
+    })
     @Transactional
     @Override
     public UserDto updateUser(final UserDto userDto) {
@@ -51,6 +61,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(updatedUser);
     }
 
+    @Caching(cacheable = {
+            @Cacheable(value = "UserService::getByIdOrThrowException", key = "#userDto.id"),
+            @Cacheable(value = "UserService::getByUsernameOrThrowException", key = "#userDto.username")
+    })
     @Transactional
     @Override
     public UserDto createOrThrowException(final UserDto userDto) {
@@ -67,6 +81,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
+    @Cacheable(value = "UserService::isTaskOwner", key = "#userId" + "." + "#taskId")
     @Override
     public boolean isTaskOwner(final Long userId, final Long taskId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -75,6 +90,7 @@ public class UserServiceImpl implements UserService {
         return user.getTasks().stream().anyMatch(it -> it.getId().equals(taskId));
     }
 
+    @CacheEvict(value = "UserService::getByIdOrThrowException", key = "#id")
     @Transactional
     @Override
     public AnswerDto deleteById(final Long id) {

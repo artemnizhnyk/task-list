@@ -1,12 +1,18 @@
 version: '3.0'
 
+volumes:
+  cache:
+    driver: local
+  db-data:
+    driver: local
+
 services:
   app:
     build:
       context: ..
     container_name: task-list
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - db
     environment:
@@ -30,3 +36,16 @@ services:
       - "wal_level=logical"
     volumes:
       - ../src/main/resources/db-init:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.2-rc-alpine
+    restart: always
+    container_name: redis
+    env_file:
+      - .env
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - cache:/data

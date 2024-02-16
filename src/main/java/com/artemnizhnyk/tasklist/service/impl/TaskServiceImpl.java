@@ -12,6 +12,9 @@ import com.artemnizhnyk.tasklist.service.mapper.UserMapper;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @Cacheable(value = "TaskService::getByIdOrThrowException", key = "#id")
     @Transactional(readOnly = true)
     @Override
     public TaskDto getByIdOrThrowException(final Long id) {
@@ -48,6 +52,7 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    @Cacheable(value = "TaskService::getByIdOrThrowException", key = "#taskDto.id")
     @Transactional
     @Override
     public TaskDto create(TaskDto taskDto, final Long userId) {
@@ -61,6 +66,7 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(savedTask);
     }
 
+    @CachePut(value = "TaskService::getByIdOrThrowException", key = "#taskDto.id")
     @Transactional
     @Override
     public TaskDto update(final TaskDto taskDto) {
@@ -73,6 +79,7 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(updatedTask);
     }
 
+    @CacheEvict(value = "UserService::getByIdOrThrowException", key = "#id")
     @Transactional
     @Override
     public AnswerDto deleteById(final Long id) {
