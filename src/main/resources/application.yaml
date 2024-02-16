@@ -1,6 +1,6 @@
 ---
 server:
-  port: 8081
+  port: ${SERVER_PORT}
 
 spring:
   config:
@@ -31,9 +31,9 @@ spring:
 
 security:
   jwt:
-    secret: ${SECRET}
-    access: ${ACCESS}
-    refresh: ${REFRESH}
+    secret: ${JWT_SECRET}
+    access: ${JWT_ACCESS}
+    refresh: ${JWT_REFRESH}
 
 springdoc:
   override-with-generic-response: false

@@ -12,6 +12,6 @@ WORKDIR /app
 
 COPY --from=builder /home/gradle/src/build/libs /app
 
-EXPOSE 8082
+EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "/app/task-list-0.0.1-SNAPSHOT.jar"]
