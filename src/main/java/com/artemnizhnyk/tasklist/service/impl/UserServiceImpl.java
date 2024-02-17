@@ -61,9 +61,16 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(updatedUser);
     }
 
-    @Caching(cacheable = {
-            @Cacheable(value = "UserService::getByIdOrThrowException", key = "#userDto.id"),
-            @Cacheable(value = "UserService::getByUsernameOrThrowException", key = "#userDto.username")
+    @Caching(cacheable = {@Cacheable(
+            value = "UserService::getById",
+            condition = "#userDto.id!=null",
+            key = "#userDto.id"
+    ),
+            @Cacheable(
+                    value = "UserService::getByUsername",
+                    condition = "#userDto.username!=null",
+                    key = "#userDto.username"
+            )
     })
     @Transactional
     @Override

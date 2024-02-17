@@ -10,9 +10,11 @@ import jakarta.validation.constraints.Null;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
+
 @Schema(description = "User DTO")
 @Data
-public class UserDto {
+public class UserDto implements Serializable {
 
     @Schema(description = "User id", example = "1")
     @NotNull(message = "Id must be not null", groups = OnUpdate.class)

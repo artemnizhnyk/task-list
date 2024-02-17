@@ -52,7 +52,8 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    @Cacheable(value = "TaskService::getByIdOrThrowException", key = "#taskDto.id")
+    @Cacheable(value = "TaskService::getByIdOrThrowException",
+            condition = "#taskDto.id!=null", key = "#taskDto.id")
     @Transactional
     @Override
     public TaskDto create(TaskDto taskDto, final Long userId) {

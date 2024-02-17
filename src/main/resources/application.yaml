@@ -1,6 +1,6 @@
 ---
 server:
-  port: ${SERVER_PORT}
+  port: 8081
 
 spring:
   config:
@@ -26,7 +26,7 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      port: 6379
       password: ${REDIS_PASSWORD}
 
 security:
