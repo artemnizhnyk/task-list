@@ -5,7 +5,8 @@ volumes:
     driver: local
   db-data:
     driver: local
-
+  minio-data:
+    driver: local
 services:
   app:
     build:
@@ -15,6 +16,8 @@ services:
       - .env
     depends_on:
       - db
+      - redis
+      - minio
     environment:
       - HOST=${HOST}
       - POSTGRES_DB=${POSTGRES_DB}
@@ -40,7 +43,6 @@ services:
 
   redis:
     image: redis:7.2-rc-alpine
-    restart: always
     container_name: redis
     env_file:
       - .env
@@ -49,3 +51,17 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
     volumes:
       - cache:/data
+    restart: always
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY}
+    command: server ~/minio --console-address :9090
+    ports:
+      - '9090:9090'
+      - '9000:9000'
+    volumes:
+      - minio-data:/minio

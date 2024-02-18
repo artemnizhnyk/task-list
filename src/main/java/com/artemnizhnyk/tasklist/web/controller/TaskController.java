@@ -47,6 +47,6 @@ public class TaskController {
     @PostMapping("/{id}/image")
     public void uploadImage(@PathVariable final Long id,
                             @Validated @ModelAttribute final TaskImageDto taskImageDto) {
-        TaskImageDto imageDto = taskService.uploadImage(id, taskImageDto);
+        taskService.uploadImage(id, taskImageDto);
     }
 }
