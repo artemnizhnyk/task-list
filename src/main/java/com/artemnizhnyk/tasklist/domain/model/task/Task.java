@@ -7,6 +7,7 @@ import org.hibernate.annotations.Cascade;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +24,10 @@ public class Task implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status;
     private LocalDateTime expirationDate;
+    @Column(name = "image")
+    @CollectionTable(name = "tasks_images")
+    @ElementCollection
+    private List<String> images;
     @ManyToOne
     private User user;
 }

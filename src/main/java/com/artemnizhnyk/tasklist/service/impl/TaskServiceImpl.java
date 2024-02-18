@@ -5,12 +5,15 @@ import com.artemnizhnyk.tasklist.domain.model.task.Status;
 import com.artemnizhnyk.tasklist.domain.model.task.Task;
 import com.artemnizhnyk.tasklist.domain.model.user.User;
 import com.artemnizhnyk.tasklist.repository.TaskRepository;
+import com.artemnizhnyk.tasklist.service.ImageService;
 import com.artemnizhnyk.tasklist.service.TaskService;
 import com.artemnizhnyk.tasklist.service.UserService;
+import com.artemnizhnyk.tasklist.service.mapper.TaskImageMapper;
 import com.artemnizhnyk.tasklist.service.mapper.TaskMapper;
 import com.artemnizhnyk.tasklist.service.mapper.UserMapper;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
+import com.artemnizhnyk.tasklist.web.dto.TaskImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -27,9 +30,11 @@ import java.util.Optional;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
-    private final TaskMapper taskMapper;
     private final UserService userService;
+    private final ImageService imageService;
+    private final TaskMapper taskMapper;
     private final UserMapper userMapper;
+    private final TaskImageMapper taskImageMapper;
 
     @Cacheable(value = "TaskService::getByIdOrThrowException", key = "#id")
     @Transactional(readOnly = true)
@@ -87,5 +92,17 @@ public class TaskServiceImpl implements TaskService {
         getByIdOrThrowException(id);
         taskRepository.deleteById(id);
         return AnswerDto.makeDefault(true);
+    }
+
+    @CacheEvict(value = "UserService::getByIdOrThrowException", key = "#id")
+    @Override
+    public TaskImageDto uploadImage(final Long id, final TaskImageDto taskImageDto) {
+        TaskDto taskDto = getByIdOrThrowException(id);
+        String fileName = imageService.upload(taskImageDto);
+        taskDto.getImages().add(fileName);
+        update(taskDto);
+
+        taskImageMapper.toEntity(taskImageDto);
+        return null;
     }
 }

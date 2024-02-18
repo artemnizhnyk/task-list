@@ -3,6 +3,7 @@ package com.artemnizhnyk.tasklist.web.controller;
 import com.artemnizhnyk.tasklist.service.TaskService;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
 import com.artemnizhnyk.tasklist.web.dto.TaskDto;
+import com.artemnizhnyk.tasklist.web.dto.TaskImageDto;
 import com.artemnizhnyk.tasklist.web.dto.validation.OnUpdate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,5 +40,13 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public AnswerDto deleteById(@PathVariable final Long id) {
         return taskService.deleteById(id);
+    }
+
+    @PreAuthorize("@customSecurityExpression.canAccessTask(#id)")
+    @Operation(summary = "Upload image to task")
+    @PostMapping("/{id}/image")
+    public void uploadImage(@PathVariable final Long id,
+                            @Validated @ModelAttribute final TaskImageDto taskImageDto) {
+        TaskImageDto imageDto = taskService.uploadImage(id, taskImageDto);
     }
 }
