@@ -1,9 +1,6 @@
 package com.artemnizhnyk.tasklist.web.controller;
 
-import com.artemnizhnyk.tasklist.domain.exception.AccessDeniedException;
-import com.artemnizhnyk.tasklist.domain.exception.ExceptionBody;
-import com.artemnizhnyk.tasklist.domain.exception.ResourceMappingException;
-import com.artemnizhnyk.tasklist.domain.exception.ResourceNotFoundException;
+import com.artemnizhnyk.tasklist.domain.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -71,6 +68,12 @@ class ControllerAdvice {
                 ))
         );
         return exceptionBody;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ImageUploadException.class)
+    ExceptionBody handleImageUpload(final ImageUploadException e) {
+        return new ExceptionBody(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
