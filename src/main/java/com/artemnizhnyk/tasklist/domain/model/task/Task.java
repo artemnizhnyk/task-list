@@ -2,8 +2,8 @@ package com.artemnizhnyk.tasklist.domain.model.task;
 
 import com.artemnizhnyk.tasklist.domain.model.user.User;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.Cascade;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

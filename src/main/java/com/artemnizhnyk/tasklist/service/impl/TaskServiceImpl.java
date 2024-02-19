@@ -96,13 +96,12 @@ public class TaskServiceImpl implements TaskService {
 
     @CacheEvict(value = "UserService::getByIdOrThrowException", key = "#id")
     @Override
-    public TaskImageDto uploadImage(final Long id, final TaskImageDto taskImageDto) {
+    public void uploadImage(final Long id, final TaskImageDto taskImageDto) {
         TaskDto taskDto = getByIdOrThrowException(id);
         String fileName = imageService.upload(taskImageDto);
         taskDto.getImages().add(fileName);
         update(taskDto);
 
         taskImageMapper.toEntity(taskImageDto);
-        return null;
     }
 }

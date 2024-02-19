@@ -3,7 +3,6 @@ package com.artemnizhnyk.tasklist.web.security;
 import com.artemnizhnyk.tasklist.domain.exception.AccessDeniedException;
 import com.artemnizhnyk.tasklist.domain.model.user.Role;
 import com.artemnizhnyk.tasklist.service.UserService;
-import com.artemnizhnyk.tasklist.service.mapper.UserMapper;
 import com.artemnizhnyk.tasklist.service.props.JwtProperties;
 import com.artemnizhnyk.tasklist.web.dto.UserDto;
 import com.artemnizhnyk.tasklist.web.dto.auth.JwtResponse;
@@ -25,7 +24,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @RequiredArgsConstructor
 @Service

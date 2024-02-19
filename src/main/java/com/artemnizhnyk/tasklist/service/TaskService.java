@@ -9,12 +9,14 @@ import java.util.List;
 public interface TaskService {
 
     TaskDto getByIdOrThrowException(final Long id);
+
     List<TaskDto> getAllByUserId(final Long id);
-    TaskDto create(TaskDto taskDto, Long userId);
+
+    TaskDto create(final TaskDto taskDto, final Long userId);
 
     TaskDto update(final TaskDto taskDto);
 
     AnswerDto deleteById(final Long id);
 
-    TaskImageDto uploadImage(final Long id, final TaskImageDto taskImageDto);
+    void uploadImage(final Long id, final TaskImageDto taskImageDto);
 }

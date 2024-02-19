@@ -6,7 +6,6 @@ import com.artemnizhnyk.tasklist.web.dto.UserDto;
 import com.artemnizhnyk.tasklist.web.dto.auth.JwtRequest;
 import com.artemnizhnyk.tasklist.web.dto.auth.JwtResponse;
 import com.artemnizhnyk.tasklist.web.dto.validation.OnCreate;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
