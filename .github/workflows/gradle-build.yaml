@@ -29,4 +29,6 @@ jobs:
             gradle-${{ runner.os }}-
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
