@@ -5,5 +5,5 @@ import com.artemnizhnyk.tasklist.web.dto.TaskDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface TaskMapper extends Mappable<Task, TaskDto>{
+public interface TaskMapper extends Mappable<Task, TaskDto> {
 }

@@ -25,7 +25,7 @@ public class CustomSecurityExpression {
     }
 
     private boolean hasAnyRole(final Authentication authentication, final Role... roles) {
-        for (Role role: roles) {
+        for (Role role : roles) {
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
             if (authentication.getAuthorities().contains(authority)) {
                 return true;
@@ -34,12 +34,12 @@ public class CustomSecurityExpression {
         return false;
     }
 
-    public boolean canAccessTask(final  Long taskId) {
+    public boolean canAccessTask(final Long taskId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         JwtEntity user = (JwtEntity) authentication.getPrincipal();
         Long userId = user.getId();
 
-        return  userService.isTaskOwner(userId, taskId);
+        return userService.isTaskOwner(userId, taskId);
     }
 }

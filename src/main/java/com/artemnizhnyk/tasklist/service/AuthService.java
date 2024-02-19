@@ -5,6 +5,7 @@ import com.artemnizhnyk.tasklist.web.dto.auth.JwtResponse;
 
 public interface AuthService {
 
-    JwtResponse login(JwtRequest loginRequest);
-    JwtResponse refresh(String refreshToken);
+    JwtResponse login(final JwtRequest loginRequest);
+
+    JwtResponse refresh(final String refreshToken);
 }
