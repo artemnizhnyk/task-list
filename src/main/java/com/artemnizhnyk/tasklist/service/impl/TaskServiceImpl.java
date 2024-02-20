@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(task);
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     @Override
     public List<TaskDto> getAllByUserId(final Long id) {
         List<Task> usersByUserId = taskRepository.findAllByUserId(id);
