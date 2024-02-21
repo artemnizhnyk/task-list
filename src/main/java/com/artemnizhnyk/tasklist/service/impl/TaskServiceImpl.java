@@ -76,6 +76,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @Override
     public TaskDto update(final TaskDto taskDto) {
+        if (taskDto.getStatus() == null) {
+            taskDto.setStatus(Status.TODO);
+        }
         User taskOwner = taskRepository.findById(taskDto.getId()).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("Task with id: %d, wasn't found", taskDto.getId()))
         ).getUser();
