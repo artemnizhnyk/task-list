@@ -21,6 +21,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
         return taskMapper.toDto(task);
     }
 
-//    @Transactional(readOnly = true)
+    //    @Transactional(readOnly = true)
     @Override
     public List<TaskDto> getAllByUserId(final Long id) {
         List<Task> usersByUserId = taskRepository.findAllByUserId(id);
@@ -103,5 +105,12 @@ public class TaskServiceImpl implements TaskService {
         update(taskDto);
 
         taskImageMapper.toEntity(taskImageDto);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Task> getAllSoonTasks(final Duration duration) {
+        LocalDateTime now = LocalDateTime.now();
+        return taskRepository.findAllByExpirationDateIsLessThan(now.plus(duration));
     }
 }

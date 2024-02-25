@@ -1,9 +1,11 @@
 package com.artemnizhnyk.tasklist.service.impl;
 
 import com.artemnizhnyk.tasklist.domain.exception.ResourceNotFoundException;
+import com.artemnizhnyk.tasklist.domain.model.MailType;
 import com.artemnizhnyk.tasklist.domain.model.user.Role;
 import com.artemnizhnyk.tasklist.domain.model.user.User;
 import com.artemnizhnyk.tasklist.repository.UserRepository;
+import com.artemnizhnyk.tasklist.service.MailService;
 import com.artemnizhnyk.tasklist.service.UserService;
 import com.artemnizhnyk.tasklist.service.mapper.UserMapper;
 import com.artemnizhnyk.tasklist.web.dto.AnswerDto;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Properties;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @Cacheable(value = "UserService::getByIdOrThrowException", key = "#id")
     @Transactional(readOnly = true)
@@ -84,7 +88,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
-        return userMapper.toDto(userRepository.save(user));
+        UserDto savedUserDto = userMapper.toDto(userRepository.save(user));
+        mailService.sendEmail(savedUserDto, MailType.REGISTRATION, new Properties());
+        return savedUserDto;
     }
 
     @Cacheable(value = "UserService::isTaskOwner", key = "#userId" + "." + "#taskId")
